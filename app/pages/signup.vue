@@ -40,9 +40,13 @@ const fields = [{
 }]
 
 const validate = (state: any) => {
+  // Remonte les erreurs de validation des champs
   const errors = []
   if (!state.email) errors.push({ path: 'email', message: 'Email is required' })
   if (!state.password) errors.push({ path: 'password', message: 'Password is required' })
+  // Si le message errorMsg est défini, on l'ajoute à la liste des erreurs
+  if (errorMsg.value) errors.push({ path: 'password', message: errorMsg.value })
+  if (successMsg.value) errors.push({ path: 'password', message: successMsg.value })
   return errors
 }
 
