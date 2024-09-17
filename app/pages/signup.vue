@@ -1,4 +1,24 @@
 <script setup lang="ts">
+const supabase = useSupabaseClient()
+const errorMsg = ref(null)
+const successMsg = ref(null)
+
+async function signUp(data: any) {
+  try {
+    const { error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password
+    })
+    if (error) {
+      errorMsg.value = error.message
+    } else {
+      successMsg.value = 'Account created successfully! Please check your email to verify your account.'
+    }
+  } catch (error) {
+    errorMsg.value = error.message
+  }
+}
+
 definePageMeta({
   layout: 'auth'
 })
@@ -8,11 +28,6 @@ useSeoMeta({
 })
 
 const fields = [{
-  name: 'name',
-  type: 'text',
-  label: 'Name',
-  placeholder: 'Enter your name'
-}, {
   name: 'email',
   type: 'email',
   label: 'Email',
@@ -39,10 +54,6 @@ const providers = [{
     console.log('Redirect to GitHub')
   }
 }]
-
-function onSubmit(data: any) {
-  console.log('Submitted', data)
-}
 </script>
 
 <!-- eslint-disable vue/multiline-html-element-content-newline -->
@@ -57,7 +68,7 @@ function onSubmit(data: any) {
       title="Create an account"
       :ui="{ base: 'text-center', footer: 'text-center' }"
       :submit-button="{ label: 'Create account' }"
-      @submit="onSubmit"
+      @submit="signUp"
     >
       <template #description>
         Already have an account? <NuxtLink

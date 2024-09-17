@@ -1,4 +1,25 @@
 <script setup lang="ts">
+const supabase = useSupabaseClient()
+const errorMsg = ref(null)
+const successMsg = ref(null)
+
+async function signIn(data: any) {
+  try {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password
+    })
+    if (error) {
+      errorMsg.value = error.message
+    } else {
+      successMsg.value = 'Signed in successfully!'
+      // TODO: Redirect to the dashboard not implemented
+      navigateTo('/pricing')
+    }
+  } catch (error) {
+    errorMsg.value = error.message
+  }
+}
 definePageMeta({
   layout: 'auth'
 })
@@ -34,10 +55,6 @@ const providers = [{
     console.log('Redirect to GitHub')
   }
 }]
-
-function onSubmit(data: any) {
-  console.log('Submitted', data)
-}
 </script>
 
 <!-- eslint-disable vue/multiline-html-element-content-newline -->
@@ -53,7 +70,7 @@ function onSubmit(data: any) {
       icon="i-heroicons-lock-closed"
       :ui="{ base: 'text-center', footer: 'text-center' }"
       :submit-button="{ trailingIcon: 'i-heroicons-arrow-right-20-solid' }"
-      @submit="onSubmit"
+      @submit="signIn"
     >
       <template #description>
         Don't have an account? <NuxtLink
