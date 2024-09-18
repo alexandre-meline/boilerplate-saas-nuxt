@@ -21,6 +21,9 @@ defineOgImage({
 })
 
 const isYearly = ref(false)
+const { data: isSubscribed, pending: isLoading } = await useFetch('/api/stripe/checkStatus')
+console.log('isSubscribed', isSubscribed)
+console.log('isLoading', isLoading)
 
 // Fonction appelée lors du clic sur le bouton de prix
 // Fonction appelée lors du clic sur le bouton de prix
