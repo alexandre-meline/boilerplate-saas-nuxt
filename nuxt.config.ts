@@ -11,7 +11,8 @@ export default defineNuxtConfig({
     '@nuxthq/studio',
     '@vueuse/nuxt',
     'nuxt-og-image',
-    '@nuxtjs/supabase'
+    '@nuxtjs/supabase',
+    '@prisma/nuxt'
   ],
 
   hooks: {
@@ -60,6 +61,13 @@ export default defineNuxtConfig({
     // Options
     url: process.env.SUPABASE_URL,
     key: process.env.SUPABASE_KEY,
-    redirect: false 
+    redirect: false
+  },
+  runtimeConfig: {
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    stripeSecretWebhookKey: process.env.STRIPE_SECRET_WEBHOOK_KEY,
+    public: {
+      stripePublicKey: process.env.STRIPE_PUBLIC_KEY
+    }
   }
 })

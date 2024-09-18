@@ -20,7 +20,7 @@ async function logout() {
   try {
     await supabase.auth.signOut()
     user.value = null
-    navigateTo('/login')
+    navigateTo('/')
   } catch (error) {
     console.error('Error logging out:', error.message)
   }
