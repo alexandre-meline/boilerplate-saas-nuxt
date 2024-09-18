@@ -24,6 +24,7 @@
     "date-fns": "^3.6.0",
     "nuxt": "^3.12.4",
     "nuxt-og-image": "^3.0.0-rc.65",
+    "stripe": "^16.11.0",
     "v-calendar": "^3.1.2"
   },
   "devDependencies": {
@@ -31,6 +32,7 @@
     "@nuxthq/studio": "^2.0.3",
     "@prisma/client": "^5.19.1",
     "eslint": "^9.9.0",
+    "prisma": "5.19.1",
     "vue-tsc": "^2.0.29"
   }
 }
