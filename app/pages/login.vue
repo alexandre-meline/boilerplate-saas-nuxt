@@ -20,6 +20,20 @@ async function signIn(data: any) {
     errorMsg.value = error.message
   }
 }
+
+async function signInWithProvider(providerName: string) {
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({ provider: providerName })
+    if (error) {
+      errorMsg.value = error.message
+    } else {
+      successMsg.value = 'Signed in successfully!'
+    }
+  } catch (error) {
+    errorMsg.value = error.message
+  }
+}
+
 definePageMeta({
   layout: 'auth'
 })
@@ -54,7 +68,7 @@ const providers = [{
   icon: 'i-simple-icons-github',
   color: 'white' as const,
   click: () => {
-    console.log('Redirect to GitHub')
+    signInWithProvider('github')
   }
 }]
 </script>
