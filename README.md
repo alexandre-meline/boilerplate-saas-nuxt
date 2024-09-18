@@ -1,20 +1,84 @@
-![nuxt-ui-saas-social-card](https://github.com/nuxt-ui-pro/saas/assets/739984/50bf4ddd-c4d5-47e5-a09e-0f699513dfb5)
+# Ecole2600 Saas Boilerplate
 
-# Nuxt UI Pro - SaaS template
+This is a boilerplate for a SaaS project based on Nuxt.js and Supabase.
 
-[![Nuxt UI Pro](https://img.shields.io/badge/Made%20with-Nuxt%20UI%20Pro-00DC82?logo=nuxt.js&labelColor=020420)](https://ui.nuxt.com/pro)
+## Features
 
-- [Live demo](https://saas-template.nuxt.dev/)
-- [Play on Stackblitz](https://stackblitz.com/github/nuxt-ui-pro/saas)
-- [Documentation](https://ui.nuxt.com/pro/getting-started)
+- Authentication
+  - Email & Password
+  - OAuth
+- Subscription
+  - Stripe
+- Payment
+  - Stripe
+- Database
+  - Supabase
+
+## Tech Stack
+
+- [Nuxt.js](https://nuxtjs.org)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Supabase](https://supabase.io)
+- [Stripe](https://stripe.com)
+
+## Requirements
+
+- Node.js
+- npm or pnpm or yarn
+- Supabase account
+- Stripe account
 
 ## Quick Start
 
-```bash [Terminal]
-npx nuxi init -t github:nuxt-ui-pro/saas
+### Clone the repository
+
+```bash
+git clone https://github.com/alexandre-meline/boilerplate-saas-nuxt.git
 ```
 
-## Setup
+Go to project
+
+```bash
+cd boilerplate-saas-nuxt
+```
+
+### Init project: manually
+
+```bash[Terminal]
+touch ./env
+```
+
+and adding environnement variables in .env file
+
+```bash
+# Application url
+APP_URL=http://localhost:3000
+# Production license for @nuxt/ui-pro, get one at https://ui.nuxt.com/pro/purchase
+NUXT_UI_PRO_LICENSE=
+# Public URL, used for OG Image when running nuxt generate
+NUXT_PUBLIC_SITE_URL=
+
+# Database 'Supabase':
+SUPABASE_URL= https://<project_id>.supabase.co
+SUPABASE_KEY=eyJhbGc...
+DATABASE_URL=postgresql://postgres.<project_id>:<your_password>@aws-0-us-east-1.pooler.supabase.com:5432/postgres
+
+# Payment 'Stripe':
+STRIPE_PUBLIC_KEY=pk_test_51P8M...
+STRIPE_SECRET_KEY=sk_test_51P8M...
+STRIPE_WEBHOOK_SECRET_KEY=whsec_...
+```
+
+### Init project: Automatic
+
+You can use the `configproject` script to configure your project automatically.
+
+```bash
+chmod +x ./configproject
+./configproject
+```
+
+## Recurring commands
 
 Make sure to install the dependencies:
 
@@ -32,7 +96,7 @@ yarn install
 bun install
 ```
 
-## Development Server
+### Development Server
 
 Start the development server on `http://localhost:3000`:
 
@@ -50,7 +114,7 @@ yarn dev
 bun run dev
 ```
 
-## Production
+### Production
 
 Build the application for production:
 
@@ -84,40 +148,4 @@ yarn preview
 bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-## Nuxt Studio integration
-
-Add `@nuxthq/studio` dependency to your package.json:
-
-```bash
-# npm
-npm install --save-dev @nuxthq/studio
-
-# pnpm
-pnpm add -D @nuxthq/studio
-
-# yarn
-yarn add -D @nuxthq/studio
-
-# bun
-bun add -d @nuxthq/studio
-```
-
-Add this module to your `nuxt.config.ts`:
-
-```ts
-export default defineNuxtConfig({
-  ...
-  modules: [
-    ...
-    '@nuxthq/studio'
-  ]
-})
-```
-
-Read more on [Nuxt Studio docs](https://nuxt.studio/docs/get-started/setup).
-
-## Renovate integration
-
-Install [Renovate GitHub app](https://github.com/apps/renovate/installations/select_target) on your repository and you are good to go.
+-----

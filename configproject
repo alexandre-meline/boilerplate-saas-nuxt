@@ -1,0 +1,94 @@
+#!/bin/bash
+
+# Define the .env file path
+ENV_FILE=".env"
+
+# Check if .env file exists
+if [[ -f "$ENV_FILE" ]]; then
+  echo ".env file already exists."
+else
+  echo ".env file does not exist, creating .env file..."
+
+  # Prompt for each environment variable and save them in the .env file
+  echo "Please enter the following environment variables:"
+  echo "[!] Note: You can skip any variable by pressing Enter."
+  echo ""
+  echo "Application URL (APP_URL): by default http://localhost:3000"
+  read -p "Enter Application URL (APP_URL): " APP_URL
+  echo ""
+  echo "Production license for @nuxt/ui-pro, get one at https://ui.nuxt.com/pro/purchase"
+  read -p "Enter Nuxt UI Pro License (NUXT_UI_PRO_LICENSE): " NUXT_UI_PRO_LICENSE
+  echo ""
+  echo "Public URL, used for OG Image when running nuxt generate"
+  read -p "Enter Public URL (NUXT_PUBLIC_SITE_URL): " NUXT_PUBLIC_SITE_URL
+  echo ""
+  echo "Database 'Supabase'"
+  echo "Supabase: https://supabase.io/"
+  read -p "Enter Supabase URL (SUPABASE_URL): " SUPABASE_URL
+  read -p "Enter Supabase Key (SUPABASE_KEY): " SUPABASE_KEY
+  read -p "Enter Database URL (DATABASE_URL): " DATABASE_URL
+  echo ""
+  echo "Payment 'Stripe'"
+  echo "Stripe: https://stripe.com/"
+  read -p "Enter Stripe Public Key (STRIPE_PUBLIC_KEY): " STRIPE_PUBLIC_KEY
+  read -p "Enter Stripe Secret Key (STRIPE_SECRET_KEY): " STRIPE_SECRET_KEY
+  read -p "Enter Stripe Webhook Secret (STRIPE_WEBHOOK_SECRET): " STRIPE_WEBHOOK_SECRET
+  echo ""
+  # read -p "Enter LemonSqueezy API Key (LEMONSQUEEZY_API_KEY): " LEMONSQUEEZY_API_KEY
+  # read -p "Enter LemonSqueezy Webhook URL (LEMONSQUEEZY_WEBHOOK_URL): " LEMONSQUEEZY_WEBHOOK_URL
+  # read -p "Enter LemonSqueezy Webhook Secret (LEMONSQUEEZY_WEBHOOK_SECRET): " LEMONSQUEEZY_WEBHOOK_SECRET
+
+  # Write the environment variables to the .env file
+  cat <<EOL > "$ENV_FILE"
+# Application url
+APP_URL=${APP_URL}
+# Production license for @nuxt/ui-pro, get one at https://ui.nuxt.com/pro/purchase
+NUXT_UI_PRO_LICENSE=${NUXT_UI_PRO_LICENSE}
+# Public URL, used for OG Image when running nuxt generate
+NUXT_PUBLIC_SITE_URL=${NUXT_PUBLIC_SITE_URL}
+# Database 'Supabase'
+SUPABASE_URL=${SUPABASE_URL}
+SUPABASE_KEY=${SUPABASE_KEY}
+DATABASE_URL=${DATABASE_URL}
+# Payment 'Stripe'
+STRIPE_PUBLIC_KEY=${STRIPE_PUBLIC_KEY}
+STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+STRIPE_WEBHOOK_SECRET_KEY=${STRIPE_WEBHOOK_SECRET}
+EOL
+
+  echo ".env file created successfully."
+fi
+
+# Run preinstall commands
+echo "Running preinstall commands..."
+# Install dependencies based on the lock file
+if [[ -f "yarn.lock" ]]; then
+  echo "yarn.lock file already exists."
+  echo "Running yarn install..."
+  yarn install
+elif [[ -f "pnpm-lock.yaml" ]]; then
+  echo "pnpm-lock.yaml file already exists."
+  echo "Running pnpm install..."
+  pnpm install
+else
+  echo "Running npm install..."
+  npm install
+fi
+
+# Run the Prisma CLI to generate the Prisma Client
+echo "Running Prisma CLI to generate the Prisma Client..."
+npx prisma generate
+
+# Run the Prisma CLI to migrate the database
+echo "Running Prisma CLI to migrate the database..."
+npx prisma migrate dev --name "init"
+
+# Run the development server
+echo "Running the development server..."
+if [[ -f "yarn.lock" ]]; then
+  yarn dev
+elif [[ -f "pnpm-lock.yaml" ]]; then
+  pnpm run dev
+else
+  npm run dev
+fi
