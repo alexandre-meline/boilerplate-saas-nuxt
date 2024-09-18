@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   extends: ['@nuxt/ui-pro'],
 
   modules: [
+    '@nuxt/eslint',
     '@nuxt/content',
     '@nuxt/eslint',
     '@nuxt/fonts',
@@ -64,8 +65,9 @@ export default defineNuxtConfig({
     redirect: false
   },
   runtimeConfig: {
+    appUrl: process.env.APP_URL,
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
-    stripeSecretWebhookKey: process.env.STRIPE_SECRET_WEBHOOK_KEY,
+    stripeSecretWebhookKey: process.env.STRIPE_WEBHOOK_SECRET,
     public: {
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY
     }

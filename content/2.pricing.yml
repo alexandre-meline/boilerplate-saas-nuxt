@@ -10,7 +10,9 @@ plans:
     description: A basic plan for individuals.
     price:
       month: $9.9
+      month_stripe_plan_id: price_1P95GFD29XF2zlWgkKXrkufr
       year: $99.9
+      year_stripe_plan_id: price_1PBHFKD29XF2zlWg2jPeqz3e
     align: top
     button:
       label: Get Started
@@ -27,7 +29,9 @@ plans:
     description: A standard plan for small teams.
     price:
       month: $19.9
+      month_stripe_plan_id: price_1Q0RA3D29XF2zlWgTASr4bq4
       year: $199.9
+      year_stripe_plan_id: price_1Q0RAmD29XF2zlWg3Q4NBf26
     highlight: true
     align: top
     button:
@@ -45,7 +49,9 @@ plans:
     description: A premium plan for large teams.
     price:
       month: $29.9
+      month_stripe_plan_id: price_1Q0RCkD29XF2zlWgufMCJYCd
       year: $299.9
+      year_stripe_plan_id: price_1Q0RDUD29XF2zlWgGyXGllaT
     align: top
     button:
       label: Get Started
