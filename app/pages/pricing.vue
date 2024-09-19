@@ -7,6 +7,10 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
+definePageMeta({
+  layout: 'site'
+})
+
 useSeoMeta({
   title: page.value.title,
   ogTitle: page.value.title,

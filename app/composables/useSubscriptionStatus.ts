@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { useFetch } from '#app'
 
-export function useSubscriptionStatus() {
+export function _useSubscriptionStatus() {
   const isSubscribed = ref(false)
   const isLoading = ref(true)
 
@@ -32,3 +32,5 @@ export function useSubscriptionStatus() {
 
   return { isSubscribed, isLoading }
 }
+
+export const useSubscriptionStatus = createSharedComposable(_useSubscriptionStatus)

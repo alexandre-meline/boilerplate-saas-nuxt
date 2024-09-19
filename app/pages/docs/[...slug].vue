@@ -14,6 +14,10 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => qu
   .findSurround(withoutTrailingSlash(route.path))
 , { default: () => [] })
 
+definePageMeta({
+  layout: 'site'
+})
+
 useSeoMeta({
   title: page.value.title,
   ogTitle: page.value.title,

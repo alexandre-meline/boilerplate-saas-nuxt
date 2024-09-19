@@ -11,6 +11,10 @@ useSeoMeta({
   description: page.value.description,
   ogDescription: page.value.description
 })
+
+definePageMeta({
+  layout: 'site'
+})
 </script>
 
 <template>

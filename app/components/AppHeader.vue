@@ -45,6 +45,12 @@ async function logout() {
           color="red"
           @click="logout"
         />
+        <UButton
+          icon="i-heroicons-user-circle"
+          label="Dashboard"
+          color="gray"
+          to="/dashboard"
+        />
       </template>
       <template v-else>
         <UButton
