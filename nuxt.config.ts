@@ -16,6 +16,10 @@ export default defineNuxtConfig({
     '@prisma/nuxt'
   ],
 
+  ui: {
+    safelistColors: ['primary', 'red', 'orange', 'green']
+  },
+
   hooks: {
     // Define `@nuxt/ui` components as global to use them in `.md` (feel free to add those you need)
     'components:extend': (components) => {
@@ -58,12 +62,13 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-07-11',
+
   supabase: {
-    // Options
     url: process.env.SUPABASE_URL,
     key: process.env.SUPABASE_KEY,
     redirect: false
   },
+
   runtimeConfig: {
     appUrl: process.env.APP_URL,
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
