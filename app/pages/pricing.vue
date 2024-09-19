@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { is } from 'date-fns/locale';
+import { useSubscriptionStatus } from '~/composables/useSubscriptionStatus'
 
 const user = useSupabaseUser()
 const { data: page } = await useAsyncData('pricing', () => queryContent('/pricing').findOne())
@@ -21,12 +21,12 @@ defineOgImage({
 })
 
 const isYearly = ref(false)
-const { data: isSubscribed, pending: isLoading } = await useFetch('/api/stripe/checkStatus')
-console.log('isSubscribed', isSubscribed)
+
+const { isSubscribed, isLoading } = useSubscriptionStatus()
+
+console.log('isSubscribed', isSubscribed.value)
 console.log('isLoading', isLoading)
 
-// Fonction appelée lors du clic sur le bouton de prix
-// Fonction appelée lors du clic sur le bouton de prix
 async function handlePriceClick(plan) {
   if (!user.value) {
     return navigateTo('/login');

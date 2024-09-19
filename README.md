@@ -4,14 +4,17 @@ This is a boilerplate for a SaaS project based on Nuxt.js and Supabase.
 
 ## Features
 
-- Authentication
+Authentication
   - Email & Password
   - OAuth
-- Subscription
+
+Subscription
   - Stripe
-- Payment
+
+Payment
   - Stripe
-- Database
+  
+Database
   - Supabase
 
 ## Tech Stack
