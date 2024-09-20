@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const router = useRouter()
 const supabase = useSupabaseClient()
 const errorMsg = ref(null)
 const successMsg = ref(null)
@@ -14,7 +15,7 @@ async function signIn(data: any) {
     } else {
       successMsg.value = 'Signed in successfully!'
       // TODO: Redirect to the dashboard not implemented
-      navigateTo('/pricing')
+      router.push('/')
     }
   } catch (error) {
     errorMsg.value = error.message
