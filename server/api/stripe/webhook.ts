@@ -38,7 +38,8 @@ export default defineEventHandler(async (event) => {
   try {
     // Handle successful checkout session
     if (stripeEvent.type === 'checkout.session.completed') {
-      console.log('Handling checkout.session.completed event');
+      console.log('Context:', event.context);
+      console.log(`Handling checkout.session.completed event for session ${session.id}`);
       const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
       console.log('Subscription:', subscription);
 
@@ -60,25 +61,52 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    // Handle subscription update
-    if (stripeEvent.type === 'invoice.payment_succeeded') {
-      console.log('Handling invoice.payment_succeeded event');
-      const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
-      console.log('Subscription:', subscription);
+    // Handle customer subscription update
+    if (stripeEvent.type === 'customer.subscription.updated') {
+      console.log('Context:', event.context);
+      console.log(`Handling customer.subscription.updated event for subscription ${stripeEvent.data.object.id} and user ${session?.metadata?.userId}`);
+      const subscription = stripeEvent.data.object;
       await prisma.userSubscription.update({
-        where: {
-          stripeSubscriptionId: subscription.id,
-        },
-        data: {
-          stripePriceId: subscription.items.data[0].price.id,
-          stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
-        },
+          where: { stripeSubscriptionId: subscription.id },
+          data: {
+              stripePriceId: subscription.items.data[0].price.id,
+              stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+          },
       });
-
-      // Si la subscription est mise à jour, on peut mettre à jour les données de l'utilisateur
-      // "billing_reason": "subscription_update",
-
     }
+
+
+    // Handle customer subscription cancellation
+    if (stripeEvent.type === 'customer.subscription.deleted') {
+      console.log('Context:', event.context);
+      console.log(`Handling customer.subscription.deleted event for subscription ${stripeEvent.data.object.id} and user ${session?.metadata?.userId}`);
+      const subscription = stripeEvent.data.object;
+      await prisma.userSubscription.delete({
+          where: { stripeSubscriptionId: subscription.id },
+      });
+      // Ou changer le statut à "inactif"
+      // await prisma.userSubscription.update({...})
+   }
+
+       // // Handle subscription update
+    // if (stripeEvent.type === 'invoice.payment_succeeded') {
+    //   console.log('Handling invoice.payment_succeeded event');
+    //   const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
+    //   console.log('Subscription:', subscription);
+    //   await prisma.userSubscription.update({
+    //     where: {
+    //       stripeSubscriptionId: subscription.id,
+    //     },
+    //     data: {
+    //       stripePriceId: subscription.items.data[0].price.id,
+    //       stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+    //     },
+    //   });
+
+    //   // Si la subscription est mise à jour, on peut mettre à jour les données de l'utilisateur
+    //   // "billing_reason": "subscription_update",
+
+    // }
 
     return 200;
   } catch (error) {

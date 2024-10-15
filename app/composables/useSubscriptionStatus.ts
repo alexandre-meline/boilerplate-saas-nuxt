@@ -1,34 +1,41 @@
-import { ref } from 'vue'
-import { useFetch } from '#app'
+interface SubscriptionStatus {
+  isSubscribed: boolean;
+}
 
 export function useSubscriptionStatus() {
-  const isSubscribed = ref(false)
-  const isLoading = ref(true)
+  const isSubscribed = ref(false);
+  const isLoading = ref(true);
+  const errorMessage = ref<string | null>(null);
+
+  const handleError = (error: any) => {
+    console.error("Error fetching subscription status:", error);
+    errorMessage.value = "Failed to fetch subscription status. Please try again.";
+  };
+
+  const processResponse = (data: SubscriptionStatus | null) => {
+    if (data) {
+      isSubscribed.value = data.isSubscribed;
+    } else {
+      isSubscribed.value = false;
+    }
+  };
 
   const fetchStatus = async () => {
-    // Set loading to true before fetching
-    isLoading.value = true
+    isLoading.value = true;
+    errorMessage.value = null; // Reset the error message before fetch
+    const { data, error } = await useFetch<SubscriptionStatus>('/api/stripe/checkStatus');
 
-    const { data, pending, error } = await useFetch<{ isSubscribed: boolean }>('/api/stripe/checkStatus')
-
-    // Debug logs  
-    console.log('Pending:', pending.value)
-    console.log('Error:', error.value)
-    console.log('Data:', data.value)
-
-    // Update states based on fetch results
     if (error.value) {
-      console.error("Error fetching subscription status:", error.value)
+      handleError(error.value);
     } else {
-      isSubscribed.value = data.value?.isSubscribed || false
+      processResponse(data.value);
     }
-
-    // Set loading to false after fetching
-    isLoading.value = false
-  }
+    
+    isLoading.value = false;
+  };
 
   // Initialize fetch on composable creation
-  fetchStatus()
+  fetchStatus();
 
-  return { isSubscribed, isLoading }
+  return { isSubscribed, isLoading, errorMessage };
 }

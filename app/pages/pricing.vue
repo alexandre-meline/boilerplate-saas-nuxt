@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSubscriptionStatus } from '~/composables/useSubscriptionStatus'
 
+const { isSubscribed, isLoading } = useSubscriptionStatus()
 const user = useSupabaseUser()
 const { data: page } = await useAsyncData('pricing', () => queryContent('/pricing').findOne())
 if (!page.value) {
@@ -22,17 +23,11 @@ defineOgImage({
 
 const isYearly = ref(false)
 
-const { isSubscribed, isLoading } = useSubscriptionStatus()
-
-console.log('isSubscribed', isSubscribed.value)
-console.log('isLoading', isLoading)
 
 async function handlePriceClick(plan) {
   if (!user.value) {
     return navigateTo('/login');
   }
-  
-  console.log(`Le plan ${plan.title} a été cliqué ! Pour la période ${isYearly.value ? 'annuelle' : 'mensuelle'}.`);
   
   const priceId = isYearly.value
     ? plan.price.year_stripe_plan_id
@@ -42,8 +37,6 @@ async function handlePriceClick(plan) {
     console.error('Price ID non défini pour ce plan.');
     return;
   }
-  
-  console.log('Price ID :', priceId);
   
   try {
     // Call the Stripe API to retrieve the checkout URL

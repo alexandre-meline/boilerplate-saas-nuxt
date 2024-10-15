@@ -1,8 +1,15 @@
 <script setup lang="ts">
+const user = useSupabaseUser()
+const supabase = useSupabaseClient()
+
 const { data: page } = await useAsyncData('index', () => queryContent('/').findOne())
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
+
+// Récupérer le token JWT
+const { data, error } = await supabase.auth.getSession()
+console.log('JWT token:', data)
 
 useSeoMeta({
   titleTemplate: '',
