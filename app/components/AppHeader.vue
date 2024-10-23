@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { NavItem } from '@nuxt/content'
-
+const router = useRouter()
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const navigation = inject<Ref<NavItem[]>>('navigation', ref([]))
@@ -20,7 +20,7 @@ async function logout() {
   try {
     await supabase.auth.signOut()
     user.value = null
-    navigateTo('/')
+    router.go()
   } catch (error) {
     console.error('Error logging out:', error.message)
   }

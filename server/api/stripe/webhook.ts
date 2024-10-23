@@ -75,7 +75,6 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-
     // Handle customer subscription cancellation
     if (stripeEvent.type === 'customer.subscription.deleted') {
       console.log('Context:', event.context);
@@ -84,29 +83,7 @@ export default defineEventHandler(async (event) => {
       await prisma.userSubscription.delete({
           where: { stripeSubscriptionId: subscription.id },
       });
-      // Ou changer le statut à "inactif"
-      // await prisma.userSubscription.update({...})
    }
-
-       // // Handle subscription update
-    // if (stripeEvent.type === 'invoice.payment_succeeded') {
-    //   console.log('Handling invoice.payment_succeeded event');
-    //   const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
-    //   console.log('Subscription:', subscription);
-    //   await prisma.userSubscription.update({
-    //     where: {
-    //       stripeSubscriptionId: subscription.id,
-    //     },
-    //     data: {
-    //       stripePriceId: subscription.items.data[0].price.id,
-    //       stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
-    //     },
-    //   });
-
-    //   // Si la subscription est mise à jour, on peut mettre à jour les données de l'utilisateur
-    //   // "billing_reason": "subscription_update",
-
-    // }
 
     return 200;
   } catch (error) {

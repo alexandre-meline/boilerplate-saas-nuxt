@@ -68,6 +68,7 @@ export default defineNuxtConfig({
     appUrl: process.env.APP_URL,
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
     stripeSecretWebhookKey: process.env.STRIPE_WEBHOOK_SECRET_KEY,
+    djangoUrl: process.env.DJANGO_API_URL,
     public: {
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY
     }
