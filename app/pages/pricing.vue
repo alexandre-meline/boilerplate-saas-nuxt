@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { useSubscriptionStatus } from '~/composables/useSubscriptionStatus'
+import { useSubscriptionCreate } from '~/composables/useSubscriptionCreate'
 
-const { isSubscribed, isLoading } = useSubscriptionStatus()
+// Importer le composable de création d'abonnement
+const { subscription, isLoading: isCreatingSubscription, errorMessage, createSubscription } = useSubscriptionCreate()
+
+const { isSubscribed, isLoading: isCheckingSubscription } = useSubscriptionStatus()
 const user = useSupabaseUser()
+const supabase = useSupabaseClient()
 const { data: page } = await useAsyncData('pricing', () => queryContent('/pricing').findOne())
+
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
@@ -16,54 +22,38 @@ useSeoMeta({
 })
 
 defineOgImage({
-  component: 'Saas',
-  title: page.value.title,
-  description: page.value.description
+  component: 'Saas'
 })
 
 const isYearly = ref(false)
 
-
 async function handlePriceClick(plan) {
   if (!user.value) {
-    return navigateTo('/login');
+    return navigateTo('/login')
   }
-  
+
   const priceId = isYearly.value
     ? plan.price.year_stripe_plan_id
-    : plan.price.month_stripe_plan_id;
-  
+    : plan.price.month_stripe_plan_id
+
   if (!priceId) {
-    console.error('Price ID non défini pour ce plan.');
-    return;
+    console.error('Price ID non défini pour ce plan.')
+    return
   }
-  
+
   try {
-    // Call the Stripe API to retrieve the checkout URL
-    const queryParams = new URLSearchParams({ priceId });
-    const response = await fetch(`/api/stripe?${queryParams.toString()}`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      }
-    });
+    await createSubscription(priceId)
 
-    if (!response.ok) {
-      console.error('Error fetching checkout session:', response.statusText);
-      return;
-    }
-
-    const data = await response.json();
-    if (data.url) {
-      // Redirect the user to the Stripe payment URL
-      window.location.href = data.url;
-    } else {
-      console.error('Error retrieving checkout URL.');
+    if (subscription.value?.url) {
+      window.location.href = subscription.value.url
+    } else if (errorMessage.value) {
+      console.error('Error message:', errorMessage.value)
     }
   } catch (error) {
-    console.error('Error calling Stripe API:', error);
+    console.error('Error during subscription creation:', error)
   }
 }
+
 </script>
 
 <template>

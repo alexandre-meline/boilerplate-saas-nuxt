@@ -2,21 +2,16 @@ import { useSubscriptionStatus } from '~/composables/useSubscriptionStatus'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const { isSubscribed, isLoading } = useSubscriptionStatus()
-
-  // Attendre la fin du chargement de l'état de la souscription
-  if (isLoading.value) {
-    await new Promise(resolve => {
-      const unwatch = isLoading.watch((newValue) => {
-        if (!newValue) {
-          unwatch()
-          resolve(true)
-        }
-      })
-    })
+  const user = useSupabaseUser()
+  if (!user.value) {
+    return navigateTo('/login')
   }
-  
-  if (!isSubscribed.value && to.name !== 'pricing') {
-    // Redirige les utilisateurs non abonnés vers la page de tarification
+
+  while (isLoading.value) {
+    await new Promise(resolve => setTimeout(resolve, 100))
+  }
+
+  if (!isSubscribed.value) {
     return navigateTo('/pricing')
   }
 })

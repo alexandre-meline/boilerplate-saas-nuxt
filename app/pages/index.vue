@@ -7,9 +7,6 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const { data, error } = await supabase.auth.getSession()
-console.log(data.session.access_token)
-
 useSeoMeta({
   titleTemplate: '',
   title: page.value.title,
@@ -21,7 +18,6 @@ useSeoMeta({
 
 <template>
   <div v-if="page">
-    <DjUser/>
     <ULandingHero
       :title="page.hero.title"
       :description="page.hero.description"
